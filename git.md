@@ -5,7 +5,11 @@
 - **簡單來說**: 檔案內容。
 
 ### 1.2 `tree`
-- **用途**: `tree` 是 Git 中的目錄結構，它指向一組 `blob` 和其他 `tree`，表示某個目錄下的檔案和子目錄。每個 commit 都會對應一個 `tree`，表示該 commit 時檔案系統的快照。
+- **用途**: `tree` 是 Git 中的目錄結構，它指向一組 `blob` 和其他 `tree`，表示某個目錄下的檔案和子目錄。每個 commit 都會對應一個 `tree`，表示該 commit 時檔案系統的快照。在 .git 目錄裡，並沒有名為 tree 的單一檔案，但**tree** 概念在 Git 的物件模型中是一個重要的部分。Git 使用了一個物件儲存庫來儲存每一個 commit 的檔案樹結構（tree）。這些物件儲存在 .git/objects/ 目錄中，分成多個檔案和子目錄結構。具體來說：
+1. tree 物件：tree 是一種 Git 物件，它描述了一個目錄下的檔案及其目錄結構。每次 commit 都包含一個 tree，這個 tree 會指向其他的 blob（實際的檔案內容）和子 tree（子目錄）。
+-  這些 tree 物件並不是以簡單的 "tree" 檔案形式存在，而是被分成哈希值所對應的目錄和檔案儲存在 .git/objects/ 裡。
+1. .git/objects/ 資料夾：這裡存放了所有的 Git 物件，包括 blob（檔案內容）、tree（目錄結構）和 commit（版本快照）。每個物件使用 SHA-1 哈希值命名，前兩個字元作為目錄，剩下的字元作為檔案名。
+3. .git/refs/ 和 HEAD：這些檔案記錄了分支和當前指向的 commit 物件，而每個 commit 物件會指向對應的 tree 物件，從而反映該 commit 的檔案樹結構。
 - **簡單來說**: 目錄結構。
 
 ### 1.3 `commit`
@@ -53,21 +57,22 @@
 
 ## 3. Commit Message 應該怎麼寫比較好？應該有什麼 `style` 嗎？
 
-### 3.1 Commit Message 的格式建議
-- **標題行（subject line）**: 簡潔描述這次變更，通常建議不超過 50 字元。
-- **空白行**
-- **正文部分（optional）**: 說明這次變更的詳細內容，包含動機與設計考量，特別是為什麼這些變更是必要的。每行不應超過 72 字元。
-- **結尾（optional）**: 例如關鍵字 `Fixes #123` 用來關閉 issue，或是附加相關參考。
+1. **標題簡短清楚**：
+   - Commit message 的第一行應該是對你這次修改的簡短描述（通常不超過 50 個字元）。
+   - 這行應該簡明扼要，讓人一眼就能看懂你做了什麼變更。
+   - 例如：`Fix login bug on mobile devices`
 
-### 3.2 Style 建議
-1. **使用祈使句（Imperative mood）**:
-   - 標題行應使用祈使句，例如：`Add new login feature`，而非 `Added new login feature` 或 `Adding new login feature`。
-   
-2. **避免含糊的訊息**:
-   - 不要使用模糊不清的訊息如 `fix bug`，應具體描述變更的內容，例如：`Fix issue with login redirection when using social media login`。
+2. **必要時添加詳細說明**：
+   - 如果這次修改比較複雜，可以在標題行後留一行空白，接著寫更詳細的描述。
+   - 解釋「為什麼」做這些變更，而不只是「做了什麼」，這樣未來的人能理解背後的原因。
+   - 例如：
+     ```
+     Fix login bug on mobile devices
 
-3. **保持一致性**:
-   - 專案內的 commit message 應該保持一致風格，通常會依循一定的格式，確保歷史紀錄易於閱讀和維護。
+     The issue occurred due to an incorrect handling of touch events on iOS.
+     This commit fixes that by adjusting the event listener for better compatibility.
+     ```
 
-4. **說明原因而不僅僅是結果**:
-   - 除了解釋「做了什麼」，更應該解釋「為什麼做」，這樣有助於日後維護者理解這次變更的目的。
+3. **說明關聯的 issue（可選）**：
+   - 如果這次提交是修復某個特定的問題（例如 GitHub Issue），可以在 message 中用 `Fixes #123` 來關閉這個 issue。
+   - 這樣專案管理工具可以自動追蹤這個提交解決的問題。
