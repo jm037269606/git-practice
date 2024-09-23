@@ -1,0 +1,13 @@
+{
+  "name": "week-02",
+  "version": "1.0.0",
+  "description": "目前安裝的版本是官網上 [Node.js 官方網站](https://nodejs.org/zh-tw) 提供的 LTS 版本：v20.17.0。",
+  "main": "main.js",
+  "type": "module", 
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
